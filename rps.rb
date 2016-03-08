@@ -1,3 +1,4 @@
+
 class Game
   def initialize(player_choice = 0)
     @choice_hsh = {R:["ROCK", "SCISSORS"], P:["PAPER", "ROCK"], S:["SCISSORS", "PAPER"]}
@@ -35,8 +36,9 @@ class Game
   end
 
   def output
+
     puts "Player: #{@choice_hsh[@player_choice][0]} vs Computer: #{@choice_hsh[@computer_choice][0]}"
-    puts "-" * 30
+    puts "-" * 60
   end
 
   def score
@@ -48,6 +50,7 @@ class Game
     puts "Computer has won #{@computer_wins[:R]} times with ROCK"
     puts "Computer has won #{@computer_wins[:P]} times with PAPER"
     puts "Computer has won #{@computer_wins[:S]} times with SCISSORS"
+
   end
 
 end
@@ -90,4 +93,5 @@ def start
   print "> "
   user_selection = validate(gets.chomp, true)
 end
+system "clear"
 start
