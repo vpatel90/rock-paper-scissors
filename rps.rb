@@ -1,4 +1,25 @@
 require 'paint'
+ROCK =["    _______",
+      "---'   ____)",
+      "      (_____)",
+      "      (_____)",
+      "      (____)",
+      "---.__(___)"]
+
+PAPER =["    _______",
+      "---'   ____)____",
+      "          ______)",
+      "          _______)",
+      "         _______)",
+      "---.__________)"]
+
+SCISSORS =["    _______",
+      "---'   ____)____",
+      "          ______)",
+      "       __________)",
+      "      (____)",
+      "---.__(___)"]
+
 class Table
   def initialize(arr2d)
     @arr2d = arr2d
@@ -35,7 +56,7 @@ end
 
 class Game
   def initialize(player_choice = 0)
-    @choice_hsh = {R:["ROCK", "SCISSORS"], P:["PAPER", "ROCK"], S:["SCISSORS", "PAPER"]}
+    @choice_hsh = {R:["ROCK", "SCISSORS", ROCK], P:["PAPER", "ROCK", PAPER], S:["SCISSORS", "PAPER", SCISSORS]}
     @player_wins = {R:0,P:0,S:0}
     @computer_wins = {R:0,P:0,S:0}
     @ties = {R:0,P:0,S:0}
@@ -78,6 +99,19 @@ class Game
     puts @div
     puts @win_msg
     puts @div
+    print_hands
+  end
+
+  def print_hands
+    @player_hand = @choice_hsh[@player_choice][2]
+    @computer_hand = @choice_hsh[@computer_choice][2]
+    @player_hand.each_with_index do |hand_part, index|
+      hand_part = Paint[hand_part, :green]
+      cpu_hand_part = Paint[@computer_hand[index].reverse, :red]
+      print hand_part +" "* 15 + cpu_hand_part
+      puts
+
+    end
   end
 
   def score
@@ -120,6 +154,7 @@ def vs_ai
   puts "Select (R)ock, (P)aper, (S)cissor or (Q)uit"
   print "> "
   user_selection = validate(gets.chomp)
+
   start
 end
 
