@@ -1,10 +1,44 @@
+require 'paint'
+class Table
+  def initialize(arr2d)
+    @arr2d = arr2d
+    @num_rows = @arr2d.length
+    @num_columns = @arr2d[0].length
+    @top_bottom_border = ("+" + "-" * 16) * @num_columns + "+"
+  end
+
+  def create_table
+    puts @top_bottom_border
+    puts create_rows
+    puts @top_bottom_border
+
+  end
+
+  def create_rows
+    @color_arr = [:blue, :red, :green, :yellow]
+    @arr2d.each do |row|
+      @color = @color_arr.pop
+      row.each do |item|
+        item = Paint[item, @color]
+        item = " " * ((25-item.length)/2) + item
+        print "|" +  item.ljust(25," ")
+      end
+      if row == @arr2d.last
+        print "|"
+        return
+      else
+        print "| \n"
+      end
+    end
+  end
+end
 
 class Game
   def initialize(player_choice = 0)
     @choice_hsh = {R:["ROCK", "SCISSORS"], P:["PAPER", "ROCK"], S:["SCISSORS", "PAPER"]}
     @player_wins = {R:0,P:0,S:0}
     @computer_wins = {R:0,P:0,S:0}
-    @ties = 0
+    @ties = {R:0,P:0,S:0}
     @simulation = false
     if player_choice == 0
       @simulation = true
@@ -20,7 +54,7 @@ class Game
     output
     if @player_choice == @computer_choice
       @outcome = "It's a Tie!"
-      @ties += 1
+      @ties[@player_choice] += 1
     elsif @choice_hsh[@player_choice][1] == @choice_hsh[@computer_choice][0]
       @outcome = "PLAYER WINS!"
       @player_wins[@player_choice] += 1
@@ -36,21 +70,19 @@ class Game
   end
 
   def output
-
-    puts "Player: #{@choice_hsh[@player_choice][0]} vs Computer: #{@choice_hsh[@computer_choice][0]}"
-    puts "-" * 60
+    @output = Paint["Player: #{@choice_hsh[@player_choice][0]} vs Computer: #{@choice_hsh[@computer_choice][0]}", :red]
+    @div = Paint["-" * 60, :blue]
+    puts @output
+    puts @div
   end
 
   def score
-    puts "After 1000 simulations"
-    puts "There were #{@ties} ties"
-    puts "Player has won #{@player_wins[:R]} times with ROCK"
-    puts "Player has won #{@player_wins[:P]} times with PAPER"
-    puts "Player has won #{@player_wins[:S]} times with SCISSORS"
-    puts "Computer has won #{@computer_wins[:R]} times with ROCK"
-    puts "Computer has won #{@computer_wins[:P]} times with PAPER"
-    puts "Computer has won #{@computer_wins[:S]} times with SCISSORS"
-
+    @score_tracker = [["","Rock", "Paper", "Scissor"],
+                      ["Player Wins", "#{@player_wins[:R]}", "#{@player_wins[:P]}", "#{@player_wins[:S]}"],
+                      ["CPU Wins", "#{@computer_wins[:R]}", "#{@computer_wins[:P]}", "#{@computer_wins[:S]}"],
+                      ["Ties", "#{@ties[:R]}", "#{@ties[:P]}", "#{@ties[:S]}"]]
+    score_table = Table.new(@score_tracker)
+    score_table.create_table
   end
 
 end
