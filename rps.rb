@@ -74,6 +74,7 @@ class Game
   end
 
   def output
+    if !@simulation then buildup end
     @player_output = Paint["Player: #{@choice_hsh[@player_choice][0]}", :green]
     @computer_output = Paint["Computer: #{@choice_hsh[@computer_choice][0]}", :red]
     @output = @player_output.ljust(35," ") + " " + @computer_output
@@ -95,6 +96,16 @@ class Game
       puts
 
     end
+  end
+
+  def buildup
+    puts "     ROCK!"
+    sleep 0.5
+    puts "     PAPER!"
+    sleep 0.5
+    puts "     SCISSOR!"
+    sleep 0.5
+    puts "     SHOOT!"
   end
 
   def score
