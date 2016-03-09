@@ -53,7 +53,7 @@ class Game
   end
 
   def play
-    if @simulation then @player_choice = computer_select end
+    @player_choice = computer_select if @simulation
     computer_select
 
     if @player_choice == @computer_choice
@@ -74,7 +74,7 @@ class Game
   end
 
   def output
-    if !@simulation then buildup end
+    buildup unless @simulation
     @player_output = Paint["Player: #{@choice_hsh[@player_choice][0]}", :green]
     @computer_output = Paint["Computer: #{@choice_hsh[@computer_choice][0]}", :red]
     @output = @player_output.ljust(35," ") + " " + @computer_output
@@ -132,7 +132,7 @@ def validate(user_selection, start = false)
       puts "Enter a valid input!"
       start
     end
-  elsif user_selection.upcase == "R" || user_selection.upcase == "P" || user_selection.upcase == "S"
+  elsif ["R","P","S"].include?(user_selection.upcase)
     game = Game.new(user_selection.upcase)
     game.play
   elsif user_selection.upcase == "Q"
