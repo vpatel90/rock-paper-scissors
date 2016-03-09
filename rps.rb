@@ -93,6 +93,12 @@ def validate(user_selection, start = false)
       simulation
     elsif user_selection.upcase == "P"
       vs_ai
+    elsif user_selection.upcase == "Q"
+      puts "Goodbye!"
+      exit
+    else
+      puts "Enter a valid input!"
+      start
     end
   elsif user_selection.upcase == "R" || user_selection.upcase == "P" || user_selection.upcase == "S"
     game = Game.new(user_selection.upcase)
@@ -110,6 +116,7 @@ def vs_ai
   puts "Select (R)ock, (P)aper, (S)cissor or (Q)uit"
   print "> "
   user_selection = validate(gets.chomp)
+  start
 end
 
 def simulation
@@ -118,10 +125,11 @@ def simulation
     game.play
   end
   game.score
+  start
 end
 
 def start
-  puts "Run (S)imulation or (P)lay vs AI!"
+  puts "Run (S)imulation or (P)lay vs AI! or (Q)uit"
   print "> "
   user_selection = validate(gets.chomp, true)
 end
