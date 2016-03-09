@@ -46,7 +46,6 @@ class Game
     @simulation = false
     if player_choice == 0
       @simulation = true
-      @player_choice = computer_select
     else
       @player_choice = player_choice.to_sym
     end
@@ -60,7 +59,7 @@ class Game
       @win_msg = Paint["It's a Tie!", :blue]
       @ties[@player_choice] += 1
     elsif @choice_hsh[@player_choice][1] == @choice_hsh[@computer_choice][0]
-      @owin_msg = Paint["PLAYER WINS!", :green]
+      @win_msg = Paint["PLAYER WINS!", :green]
       @player_wins[@player_choice] += 1
     else
       @win_msg = Paint["COMPUTER WINS!", :red]
