@@ -51,18 +51,18 @@ class Game
   def play
     if @simulation then @player_choice = computer_select end
     computer_select
-    output
+
     if @player_choice == @computer_choice
-      @outcome = "It's a Tie!"
+      @win_msg = Paint["It's a Tie!", :blue]
       @ties[@player_choice] += 1
     elsif @choice_hsh[@player_choice][1] == @choice_hsh[@computer_choice][0]
-      @outcome = "PLAYER WINS!"
+      @owin_msg = Paint["PLAYER WINS!", :green]
       @player_wins[@player_choice] += 1
     else
-      @outcome = "COMPUTER WINS!"
+      @win_msg = Paint["COMPUTER WINS!", :red]
       @computer_wins[@computer_choice] += 1
     end
-    puts @outcome
+    output
   end
 
   def computer_select
@@ -70,9 +70,13 @@ class Game
   end
 
   def output
-    @output = Paint["Player: #{@choice_hsh[@player_choice][0]} vs Computer: #{@choice_hsh[@computer_choice][0]}", :red]
+    @player_output = Paint["Player: #{@choice_hsh[@player_choice][0]}", :green]
+    @computer_output = Paint["Computer: #{@choice_hsh[@computer_choice][0]}", :red]
+    @output = @player_output + " vs " + @computer_output
     @div = Paint["-" * 60, :blue]
     puts @output
+    puts @div
+    puts @win_msg
     puts @div
   end
 
