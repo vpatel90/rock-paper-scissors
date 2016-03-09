@@ -1,24 +1,47 @@
 require 'paint'
-ROCK =["    _______",
-      "---'   ____)",
-      "      (_____)",
-      "      (_____)",
-      "      (____)",
-      "---.__(___)"]
+ROCK_L = ["    _____",
+      "---'   _ \\_ ",
+      "       (`-`) ",
+      "    ._ ((___) ",
+      "     -'((__) ",
+      "---.___((_)"]
 
-PAPER =["    _______",
-      "---'   ____)____",
+ROCK_R = ["    _____",
+      "  _/ _   '---",
+      " ('-')        ",
+      " (___)) _.     ",
+      " (__))'-      ",
+      "  (_))___.---"]
+
+PAPER_L=["    _____",
+      "---'   __\\______",
       "          ______)",
       "          _______)",
       "         _______)",
-      "---.__________)"]
+      "---.___________)"]
 
-SCISSORS =["    _______",
-      "---'   ____)____",
+PAPER_R=[ "        _____",
+      "  _____/__   `---",
+      " (______           ",
+      "(_______            ",
+      " (_______         ",
+      "  (___________.---"]
+
+
+SCISSORS_L=["    _____",
+      "---'   __\\______",
       "          ______)",
-      "       __________)",
-      "      (____)",
-      "---.__(___)"]
+      "          _______)",
+      "         (__)",
+      "---.____(__)"]
+
+
+SCISSORS_R=[ "        _____",
+      "  _____/__   `---  ",
+      " (______           ",
+      "(_______            ",
+      "      (__)          ",
+      "       (__)____.--- "]
 
 class Table
   def initialize(arr2d)
@@ -56,7 +79,9 @@ end
 
 class Game
   def initialize(player_choice = 0)
-    @choice_hsh = {R:["ROCK", "SCISSORS", ROCK], P:["PAPER", "ROCK", PAPER], S:["SCISSORS", "PAPER", SCISSORS]}
+    @choice_hsh = { R:["ROCK", "SCISSORS", ROCK_L, ROCK_R],
+                    P:["PAPER", "ROCK", PAPER_L, PAPER_R],
+                    S:["SCISSORS", "PAPER", SCISSORS_L, SCISSORS_R]}
     @player_wins = {R:0,P:0,S:0}
     @computer_wins = {R:0,P:0,S:0}
     @ties = {R:0,P:0,S:0}
@@ -93,32 +118,32 @@ class Game
   def output
     @player_output = Paint["Player: #{@choice_hsh[@player_choice][0]}", :green]
     @computer_output = Paint["Computer: #{@choice_hsh[@computer_choice][0]}", :red]
-    @output = @player_output + " vs " + @computer_output
+    @output = @player_output.ljust(35," ") + " " + @computer_output
     @div = Paint["-" * 60, :blue]
     puts @output
+    print_hands
     puts @div
     puts @win_msg
     puts @div
-    print_hands
   end
 
   def print_hands
     @player_hand = @choice_hsh[@player_choice][2]
-    @computer_hand = @choice_hsh[@computer_choice][2]
+    @computer_hand = @choice_hsh[@computer_choice][3]
     @player_hand.each_with_index do |hand_part, index|
       hand_part = Paint[hand_part, :green]
-      cpu_hand_part = Paint[@computer_hand[index].reverse, :red]
-      print hand_part +" "* 15 + cpu_hand_part
+      cpu_hand_part = Paint[@computer_hand[index], :red]
+      print hand_part.ljust(35," ") +" "+ cpu_hand_part
       puts
 
     end
   end
 
   def score
-    @score_tracker = [["","Rock", "Paper", "Scissor"],
-                      ["Player Wins", "#{@player_wins[:R]}", "#{@player_wins[:P]}", "#{@player_wins[:S]}"],
-                      ["CPU Wins", "#{@computer_wins[:R]}", "#{@computer_wins[:P]}", "#{@computer_wins[:S]}"],
-                      ["Ties", "#{@ties[:R]}", "#{@ties[:P]}", "#{@ties[:S]}"]]
+    @score_tracker = [["","Rock", "Paper", "Scissor", "Total"],
+                      ["Player Wins", "#{@player_wins[:R]}", "#{@player_wins[:P]}", "#{@player_wins[:S]}", "#{@player_wins.values.reduce(:+)}"],
+                      ["CPU Wins", "#{@computer_wins[:R]}", "#{@computer_wins[:P]}", "#{@computer_wins[:S]}", "#{@computer_wins.values.reduce(:+)}"],
+                      ["Ties", "#{@ties[:R]}", "#{@ties[:P]}", "#{@ties[:S]}", "#{@ties.values.reduce(:+)}"]]
     score_table = Table.new(@score_tracker)
     score_table.create_table
   end
@@ -154,7 +179,6 @@ def vs_ai
   puts "Select (R)ock, (P)aper, (S)cissor or (Q)uit"
   print "> "
   user_selection = validate(gets.chomp)
-
   start
 end
 
